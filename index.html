@@ -13,6 +13,55 @@
   </head>
 
   <body>
+    <div class="container">
+
+      <div class="request-type">
+        <label class="radio-inline">
+          <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> LaunchRequest
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> IntentRequest
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> SessionEndedRequest
+        </label>
+      </div>
+
+      <h3>intent</h3>
+      <div class="intent-name row">
+        <div class="form-group col-md-6">
+          <input type="text" class="form-control" id="" placeholder="intent name">
+        </div>
+      </div>
+
+      <h3>slots</h3>
+      <button class="btn btn-primary">add</button>
+      <div class="slots row">
+        <div class="form-group col-md-5">
+          <input type="text" class="form-control" id="" placeholder="key">
+        </div>
+        <div class="form-group col-md-5">
+          <input type="text" class="form-control" id="" placeholder="value">
+        </div>
+      </div>
+
+      <h3>attribute</h3>
+      <button class="btn btn-primary">add</button>
+      <div class="attribute row">
+        <div class="form-group col-md-5">
+          <input type="text" class="form-control" id="" placeholder="key">
+        </div>
+        <div class="form-group col-md-5">
+          <input type="text" class="form-control" id="" placeholder="value">
+        </div>
+      </div>
+
+      <button class="btn btn-primary">create</button>
+
+      <pre><code>&lt;p&gt;Sample text here...&lt;/p&gt;
+&lt;p&gt;And another line of sample text here...&lt;/p&gt;
+      </code></pre>
+    </div>
 
     <script src="js/bootstrap.min.js"></script>
     <script src="node_modules/admin-lte/dist/js/adminlte.min.js"></script>
