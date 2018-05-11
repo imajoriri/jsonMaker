@@ -8,6 +8,9 @@
     <link href="./node_modules/admin-lte/dist/css/adminlte.css" rel="stylesheet">
 
     <script type="text/javascript" src="./node_modules/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="./js/intent.js"></script>
+    <script type="text/javascript" src="./js/launch.js"></script>
+    <script type="text/javascript" src="./js/sessionEnd.js"></script>
     <script type="text/javascript" src="./js/index.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="node_modules/admin-lte/dist/js/adminlte.min.js"></script>
@@ -22,20 +25,20 @@
 
       <div class="request-type">
         <label class="radio-inline">
-          <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> LaunchRequest
+          <input type="radio" name="inlineRadioOptions" value="LaunchRequest"> LaunchRequest
         </label>
         <label class="radio-inline">
-          <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> IntentRequest
+          <input type="radio" name="inlineRadioOptions" value="IntentRequest" checked="checked"> IntentRequest
         </label>
         <label class="radio-inline">
-          <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> SessionEndedRequest
+          <input type="radio" name="inlineRadioOptions" value="SessionEndedRequest"> SessionEndedRequest
         </label>
       </div>
 
       <h3>intent</h3>
       <div class="intent-name row">
         <div class="form-group col-md-6">
-          <input type="text" class="form-control" id="" placeholder="intent name">
+          <input type="text" class="form-control" id="intent-name" placeholder="intent name">
         </div>
       </div>
 
@@ -49,10 +52,9 @@
       <div class="attributes">
       </div>
 
-      <button class="btn btn-primary">create</button>
+      <button class="btn btn-primary create-button">create</button>
 
-      <pre><code>&lt;p&gt;Sample text here...&lt;/p&gt;
-&lt;p&gt;And another line of sample text here...&lt;/p&gt;
+      <pre id="json-pre"><code>
       </code></pre>
     </div>
 

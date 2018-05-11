@@ -25,13 +25,44 @@ $(function(){
   //create
   var createButton = $(".create-button");
   createButton.on("click", function(){
-    var slots = createObject("slots"); // sltosのkeyとvalueを入れていく
-    var attributes = createObject("attributes"); // attributesのkeyとvalueを入れていく
-    console.log(slots);
-    $("#json-pre").html(JSON.stringify(slots));
+    var requestTypeVal = $("input[name='inlineRadioOptions']:checked").val();
+    
+    if(requestTypeVal ==="IntentRequest"){
+      var responseObj = setIntentRequest();
+    }else if(requestTypeVal === "LaunchRequest"){
+      var responseObj = launchObj;
+    }else if(requestTypeVal === "SessionEndedRequest"){
+      var responseObj = sessionEndObj;
+    }
+
+    var responseStr = JSON.stringify(responseObj, null, " ");
+    console.log(responseStr)
+    $("#json-pre").html(responseStr);
+    //$("#json-pre").html("intentObj<br>&ensp;est");
+
   });
 
 });
+
+// IntentRequest
+function setIntentRequest(){
+  var intentName = $("#intent-name").val();
+  var slots = createObject("slots"); // sltosのkeyとvalueを入れていく
+  var attributes = createObject("attributes"); // attributesのkeyとvalueを入れていく
+  // 値を代入
+  intentObj["request"]["intent"]["name"] = intentName;
+  if(Object.keys(slots).length === 0){
+    intentObj["request"]["intent"]["slots"] = null;
+  }else{
+    intentObj["request"]["intent"]["slots"] = slots;
+  }
+  if(Object.keys(attributes).length !== 0){
+    intentObj["session"]["sessionAttributes"] = attributes;
+  }
+  return intentObj;
+}
+
+
 
 // keyとvalueを取得
 function createObject(type){
@@ -43,9 +74,17 @@ function createObject(type){
     var typeNumValue = `#${type}-${String(i)}-value`;
     var key = $(perTypeNum).find(typeNumKey).val(); // key取得
     var value = $(perTypeNum).find(typeNumValue).val(); // value取得
-    obj[key] = value;
     if(key === undefined || value === undefined){
       break;
+    }
+    // それぞれ値がなかったら空で返す
+    if(type === "slots" && key !== ""){
+      obj[key] = {
+        "name": key,
+        "value": value
+      }
+    }else if(type === "attributes" && key !== ""){
+      obj[key] = value;
     }
     i++;
   }
