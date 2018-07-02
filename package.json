@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "admin-lte": "^3.0.0-alpha.2"
+    "admin-lte": "^3.0.0-alpha.2",
+    "request-promise": "^4.2.2"
   }
 }

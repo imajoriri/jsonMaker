@@ -26,7 +26,7 @@ $(function(){
   var createButton = $(".create-button");
   createButton.on("click", function(){
     var requestTypeVal = $("input[name='inlineRadioOptions']:checked").val();
-    
+
     if(requestTypeVal ==="IntentRequest"){
       var responseObj = setIntentRequest();
     }else if(requestTypeVal === "LaunchRequest"){
