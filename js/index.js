@@ -36,7 +36,6 @@ $(function(){
     }
 
     var responseStr = JSON.stringify(responseObj, null, " ");
-    console.log(responseStr)
     $("#json-pre").html(responseStr);
     //$("#json-pre").html("intentObj<br>&ensp;est");
 
@@ -57,6 +56,8 @@ function setIntentRequest(){
     intentObj["request"]["intent"]["slots"] = slots;
   }
   if(Object.keys(attributes).length !== 0){
+    //console.log(JSON.parse(attributes.ff));
+    console.log(attributes.ff);
     intentObj["session"]["sessionAttributes"] = attributes;
   }
   return intentObj;
@@ -84,7 +85,13 @@ function createObject(type){
         "value": value
       }
     }else if(type === "attributes" && key !== ""){
-      obj[key] = value;
+      console.log(value);
+      //obj[key] = value;
+      if(isJSON(value)){
+        obj[key] = JSON.parse(value);
+      }else{
+        obj[key] = value;
+      }
     }
     i++;
   }
@@ -109,4 +116,15 @@ function makePerStr(type, num){
   return str;
 }
 
-
+function isJSON(arg) {
+  arg = (typeof arg === "function") ? arg() : arg;
+  if (typeof arg  !== "string") {
+    return false;
+  }
+  try {
+    arg = (!JSON) ? eval("(" + arg + ")") : JSON.parse(arg);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
