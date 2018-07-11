@@ -41,6 +41,14 @@ var intentObj = {
     }
   }
 }
+
+export default intentObj;
+
+
+
+
+
+
 //var intentObj = {
 //  "version": "1.0",
 //  "session": {

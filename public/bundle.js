@@ -70,6 +70,20 @@
 "use strict";
 
 
+var _launch = __webpack_require__(1);
+
+var _launch2 = _interopRequireDefault(_launch);
+
+var _sessionEnd = __webpack_require__(2);
+
+var _sessionEnd2 = _interopRequireDefault(_sessionEnd);
+
+var _intent = __webpack_require__(3);
+
+var _intent2 = _interopRequireDefault(_intent);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 $(function () {
 
   // slots
@@ -100,11 +114,11 @@ $(function () {
     var requestTypeVal = $("input[name='inlineRadioOptions']:checked").val();
 
     if (requestTypeVal === "IntentRequest") {
-      var responseObj = setIntentRequest();
+      var responseObj = setIntentRequest(_intent2.default);
     } else if (requestTypeVal === "LaunchRequest") {
-      var responseObj = launchObj;
+      var responseObj = _launch2.default;
     } else if (requestTypeVal === "SessionEndedRequest") {
-      var responseObj = sessionEndObj;
+      var responseObj = _sessionEnd2.default;
     }
 
     var responseStr = JSON.stringify(responseObj, null, " ");
@@ -121,7 +135,7 @@ $(function () {
 });
 
 // IntentRequest
-function setIntentRequest() {
+function setIntentRequest(intentObj) {
   var intentName = $("#intent-name").val();
   var slots = createObject("slots"); // sltosのkeyとvalueを入れていく
   var attributes = createObject("attributes"); // attributesのkeyとvalueを入れていく
@@ -213,6 +227,176 @@ function copyTextToClipboard(textVal) {
   // 処理結果を返却
   return retVal;
 }
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+//var launchObj = {
+var launchObj = {
+  "version": "0.1.0",
+  "session": {
+    "new": true,
+    "sessionAttributes": {},
+    "sessionId": "a29cfead-c5ba-474d-8745-6c1a6625f0c5",
+    "user": {
+      "userId": "V0qe",
+      "accessToken": "XHapQasdfsdfFsdfasdflQQ7"
+    }
+  },
+  "context": {
+    "System": {
+      "application": {
+        "applicationId": "com.yourdomain.extension.pizzabot"
+      },
+      "user": {
+        "userId": "V0qe",
+        "accessToken": "XHapQasdfsdfFsdfasdflQQ7"
+      },
+      "device": {
+        "deviceId": "096e6b27-1717-33e9-b0a7-510a48658a9b",
+        "display": {
+          "size": "l100",
+          "orientation": "landscape",
+          "dpi": 96,
+          "contentLayer": {
+            "width": 640,
+            "height": 360
+          }
+        }
+      }
+    }
+  },
+  "request": {
+    "type": "LaunchRequest"
+  }
+};
+exports.default = launchObj;
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var sessionEndObj = { "version": "0.1.0", "session": { "new": false, "sessionAttributes": {}, "sessionId": "a29cfead-c5ba-474d-8745-6c1a6625f0c5", "user": { "userId": "V0qe", "accessToken": "XHapQasdfsdfFsdfasdflQQ7" } }, "context": { "System": { "application": { "applicationId": "com.yourdomain.extension.pizzabot" }, "user": { "userId": "V0qe", "accessToken": "XHapQasdfsdfFsdfasdflQQ7" }, "device": { "deviceId": "096e6b27-1717-33e9-b0a7-510a48658a9b", "display": { "size": "l100", "orientation": "landscape", "dpi": 96, "contentLayer": { "width": 640, "height": 360 } } } } }, "request": { "type": "SessionEndedRequest" } };
+exports.default = sessionEndObj;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var intentObj = {
+  "version": "1.0",
+  "session": {
+    "sessionId": "5b5ddf11-b826-457d-8ee8-eaef05a7794d",
+    "user": {
+      "userId": "KbiTcsmXQvy7qIF1PKw_nQ",
+      "accessToken": "6fa03486-2a5e-4169-89ba-6a9886f0379e"
+    },
+    "new": true
+  },
+  "context": {
+    "System": {
+      "user": {
+        "userId": "KbiTcsmXQvy7qIF1PKw_nQ",
+        "accessToken": "6fa03486-2a5e-4169-89ba-6a9886f0379e"
+      },
+      "device": {
+        "deviceId": "27366e7f-422b-4e30-9896-5f6199dc9798",
+        "display": {
+          "size": "l100",
+          "orientation": "landscape",
+          "dpi": 96,
+          "contentLayer": {
+            "width": 640,
+            "height": 360
+          }
+        }
+      }
+    }
+  },
+  "request": {
+    "type": "IntentRequest",
+    "intent": {
+      "name": "caracterIntent",
+      "slots": {
+        "caracter": {
+          "name": "caracter",
+          "value": "brown"
+        }
+      }
+    }
+  }
+};
+
+exports.default = intentObj;
+
+//var intentObj = {
+//  "version": "1.0",
+//  "session": {
+//    "new": true,
+//    "sessionId": "amzn1.echo-api.session.f52e789e-f2fe-4ceb-820e-517a12f11f92",
+//    "application": {
+//      "applicationId": "amzn1.ask.skill.a2319f7b-731f-4f13-9a16-101600c4296c"
+//    },
+//    "user": {
+//      "userId": "amzn1.ask.account.AGZXM36YT5GTZZKVSESPMG6PY64N3SXPUVF4NCM5CMH7M3F7BJFZNAOG2V5UN72HG4F5BD7ZHZRDSHL3Z4GU5TV5VS2EL2CBID3ZKRNVG6HTWY6WJ5L7NCKFBKTER57PPBUOYV63DDGNQSFYPXMIQV6TUPFTW4O36V3FUCCT47IF2MKRO7JLXEEQ3OITLXLCGTPZJ5CXZ6QOB3I"
+//    }
+//  },
+//  "context": {
+//    "AudioPlayer": {
+//      "playerActivity": "IDLE"
+//    },
+//    "Display": {},
+//    "System": {
+//      "application": {
+//        "applicationId": "amzn1.ask.skill.a2319f7b-731f-4f13-9a16-101600c4296c"
+//      },
+//      "user": {
+//        "userId": "amzn1.ask.account.AGZXM36YT5GTZZKVSESPMG6PY64N3SXPUVF4NCM5CMH7M3F7BJFZNAOG2V5UN72HG4F5BD7ZHZRDSHL3Z4GU5TV5VS2EL2CBID3ZKRNVG6HTWY6WJ5L7NCKFBKTER57PPBUOYV63DDGNQSFYPXMIQV6TUPFTW4O36V3FUCCT47IF2MKRO7JLXEEQ3OITLXLCGTPZJ5CXZ6QOB3I"
+//      },
+//      "device": {
+//        "deviceId": "amzn1.ask.device.AEU3UYTEB5IFSIWFMTKAW5YWD4IQ4CEZTO6342BK5G4VHABZ7MNMTJY45YHS22AJ7GMKUF467L2YH6QGPEGQXC4Z45IFJXVMPX53FEIPUTIVVIL66YB74WZOZQ44YWIW3264TGMGMGANUOZGD7BOVNYKB5AYLFENVP2LZKT2KZU4EDDLXA2TS",
+//        "supportedInterfaces": {
+//          "AudioPlayer": {},
+//          "Display": {
+//            "templateVersion": "1.0",
+//            "markupVersion": "1.0"
+//          }
+//        }
+//      },
+//      "apiEndpoint": "https://api.amazonalexa.com",
+//      "apiAccessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IjEifQ.a5SDEwQZHsqfBNwQ"
+//    }
+//  },
+//  "request": {
+//    "type": "IntentRequest",
+//    "requestId": "amzn1.echo-api.request.0e84a0c4-3d6e-4385-ba1d-cd1a94516fb6",
+//    "timestamp": "2018-04-24T14:58:15Z",
+//    "locale": "ja-JP",
+//    "intent": {
+//      "name": "singIntent",
+//      "confirmationStatus": "NONE"
+//    }
+//  }
+//}
 
 /***/ })
 /******/ ]);

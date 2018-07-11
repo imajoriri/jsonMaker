@@ -1,3 +1,7 @@
+import launchObj from "./launch.js";
+import sessionEndObj from "./sessionEnd.js";
+import intentObj from "./intent.js";
+
 $(function(){
 
   // slots
@@ -28,7 +32,7 @@ $(function(){
     var requestTypeVal = $("input[name='inlineRadioOptions']:checked").val();
 
     if(requestTypeVal ==="IntentRequest"){
-      var responseObj = setIntentRequest();
+      var responseObj = setIntentRequest(intentObj);
     }else if(requestTypeVal === "LaunchRequest"){
       var responseObj = launchObj;
     }else if(requestTypeVal === "SessionEndedRequest"){
@@ -52,7 +56,7 @@ $(function(){
 });
 
 // IntentRequest
-function setIntentRequest(){
+function setIntentRequest(intentObj){
   var intentName = $("#intent-name").val();
   var slots = createObject("slots"); // sltosのkeyとvalueを入れていく
   var attributes = createObject("attributes"); // attributesのkeyとvalueを入れていく

@@ -1,4 +1,5 @@
-var launchObj = {
+//var launchObj = {
+const launchObj = {
   "version": "0.1.0",
   "session": {
     "new": true,
@@ -36,3 +37,4 @@ var launchObj = {
     "type": "LaunchRequest"
   }
 }
+export default launchObj;
