@@ -82,6 +82,18 @@ var _intent = __webpack_require__(3);
 
 var _intent2 = _interopRequireDefault(_intent);
 
+var _setIntentRequest = __webpack_require__(4);
+
+var _setIntentRequest2 = _interopRequireDefault(_setIntentRequest);
+
+var _makePerStr = __webpack_require__(7);
+
+var _makePerStr2 = _interopRequireDefault(_makePerStr);
+
+var _copyTextToClipboard = __webpack_require__(8);
+
+var _copyTextToClipboard2 = _interopRequireDefault(_copyTextToClipboard);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 $(function () {
@@ -90,22 +102,22 @@ $(function () {
   var slotsAdd = $("#slots-add");
   var slots = $(".slots");
   var slotsNum = 1;
-  slots.append(makePerStr("slots", slotsNum)); // 画面を読み込んだ時に１つ表示
+  slots.append((0, _makePerStr2.default)("slots", slotsNum)); // 画面を読み込んだ時に１つ表示
 
   slotsAdd.on('click', function () {
     slotsNum++;
-    slots.append(makePerStr("slots", slotsNum));
+    slots.append((0, _makePerStr2.default)("slots", slotsNum));
   });
 
   // attrubte
   var attributesAdd = $("#attributes-add");
   var attributes = $(".attributes");
   var attributesNum = 1;
-  attributes.append(makePerStr("attributes", attributesNum));
+  attributes.append((0, _makePerStr2.default)("attributes", attributesNum));
 
   attributesAdd.on('click', function () {
     attributesNum++;
-    attributes.append(makePerStr("attributes", attributesNum));
+    attributes.append((0, _makePerStr2.default)("attributes", attributesNum));
   });
 
   //create
@@ -114,7 +126,8 @@ $(function () {
     var requestTypeVal = $("input[name='inlineRadioOptions']:checked").val();
 
     if (requestTypeVal === "IntentRequest") {
-      var responseObj = setIntentRequest(_intent2.default);
+      var intentName = $("#intent-name").val();
+      var responseObj = (0, _setIntentRequest2.default)(_intent2.default, intentName);
     } else if (requestTypeVal === "LaunchRequest") {
       var responseObj = _launch2.default;
     } else if (requestTypeVal === "SessionEndedRequest") {
@@ -129,104 +142,117 @@ $(function () {
   // copy
   $('.copy-button').on('click', function () {
     console.log($("#json-pre").html());
-    copyTextToClipboard($("#json-pre").html());
+    (0, _copyTextToClipboard2.default)($("#json-pre").html());
     alert('copied');
   });
 });
 
-// IntentRequest
-function setIntentRequest(intentObj) {
-  var intentName = $("#intent-name").val();
-  var slots = createObject("slots"); // sltosのkeyとvalueを入れていく
-  var attributes = createObject("attributes"); // attributesのkeyとvalueを入れていく
-  // 値を代入
-  intentObj["request"]["intent"]["name"] = intentName;
-  if (Object.keys(slots).length === 0) {
-    intentObj["request"]["intent"]["slots"] = null;
-  } else {
-    intentObj["request"]["intent"]["slots"] = slots;
-  }
-  if (Object.keys(attributes).length !== 0) {
-    //console.log(JSON.parse(attributes.ff));
-    console.log(attributes.ff);
-    intentObj["session"]["sessionAttributes"] = attributes;
-  }
-  return intentObj;
-}
+//// IntentRequest
+//// TODO インテント名を直接取得しない
+//function setIntentRequest(intentObj, intentName){
+//  var slots = createObject("slots"); // sltosのkeyとvalueを入れていく
+//  var attributes = createObject("attributes"); // attributesのkeyとvalueを入れていく
+//  // 値を代入
+//  intentObj["request"]["intent"]["name"] = intentName;
+//  if(Object.keys(slots).length === 0){
+//    intentObj["request"]["intent"]["slots"] = null;
+//  }else{
+//    intentObj["request"]["intent"]["slots"] = slots;
+//  }
+//  if(Object.keys(attributes).length !== 0){
+//    //console.log(JSON.parse(attributes.ff));
+//    console.log(attributes.ff);
+//    intentObj["session"]["sessionAttributes"] = attributes;
+//  }
+//  return intentObj;
+//}
 
-// keyとvalueを取得
-function createObject(type) {
-  var obj = {};
-  var i = 1;
-  while (true) {
-    var perTypeNum = ".per-" + type + "-" + String(i);
-    var typeNumKey = "#" + type + "-" + String(i) + "-key";
-    var typeNumValue = "#" + type + "-" + String(i) + "-value";
-    var key = $(perTypeNum).find(typeNumKey).val(); // key取得
-    var value = $(perTypeNum).find(typeNumValue).val(); // value取得
-    if (key === undefined || value === undefined) {
-      break;
-    }
-    // それぞれ値がなかったら空で返す
-    if (type === "slots" && key !== "") {
-      obj[key] = {
-        "name": key,
-        "value": value
-      };
-    } else if (type === "attributes" && key !== "") {
-      console.log(value);
-      //obj[key] = value;
-      if (isJSON(value)) {
-        obj[key] = JSON.parse(value);
-      } else {
-        obj[key] = value;
-      }
-    }
-    i++;
-  }
-  return obj;
-}
 
-// input要素作成
-function makePerStr(type, num) {
-  num = String(num);
-  var str = "<div class='per-" + type + "-" + num + "'>" + "<div class='row'>" + "<div class='form-group col-md-5'>" + "<input type='text' class='form-control' id='" + type + "-" + num + "-key" + "' placeholder='key'>" + "</div>" + "<div class='form-group col-md-5'>" + "<input type='text' class='form-control' id='" + type + "-" + num + "-value" + "' placeholder='value'>" + "</div>" + "</div>" + "</div>";
-  return str;
-}
+//// keyとvalueを取得
+//function createObject(type){
+//  var obj = {};
+//  var i = 1;
+//  while(true){
+//    var perTypeNum = `.per-${type}-${String(i)}`;
+//    var typeNumKey = `#${type}-${String(i)}-key`;
+//    var typeNumValue = `#${type}-${String(i)}-value`;
+//    var key = $(perTypeNum).find(typeNumKey).val(); // key取得
+//    var value = $(perTypeNum).find(typeNumValue).val(); // value取得
+//    if(key === undefined || value === undefined){
+//      break;
+//    }
+//    // それぞれ値がなかったら空で返す
+//    if(type === "slots" && key !== ""){
+//      obj[key] = {
+//        "name": key,
+//        "value": value
+//      }
+//    }else if(type === "attributes" && key !== ""){
+//      console.log(value);
+//      //obj[key] = value;
+//      if(isJSON(value)){
+//        obj[key] = JSON.parse(value);
+//      }else{
+//        obj[key] = value;
+//      }
+//    }
+//    i++;
+//  }
+//  return obj;
+//}
 
-function isJSON(arg) {
-  arg = typeof arg === "function" ? arg() : arg;
-  if (typeof arg !== "string") {
-    return false;
-  }
-  try {
-    arg = !JSON ? eval("(" + arg + ")") : JSON.parse(arg);
-    return true;
-  } catch (e) {
-    return false;
-  }
-};
 
-function copyTextToClipboard(textVal) {
-  // テキストエリアを用意する
-  var copyFrom = document.createElement("textarea");
-  // テキストエリアへ値をセット
-  copyFrom.textContent = textVal;
+//// input要素作成
+//function makePerStr(type, num){
+//  num = String(num);
+//  var str = "<div class='per-" + type + "-" + num + "'>"
+//    + "<div class='row'>"
+//    + "<div class='form-group col-md-5'>"
+//    + "<input type='text' class='form-control' id='" + type + "-" + num + "-key" + "' placeholder='key'>"
+//    + "</div>"
+//    + "<div class='form-group col-md-5'>"
+//    + "<input type='text' class='form-control' id='" + type + "-" + num + "-value" + "' placeholder='value'>"
+//    + "</div>"
+//    + "</div>"
+//    + "</div>";
+//  return str;
+//}
 
-  // bodyタグの要素を取得
-  var bodyElm = document.getElementsByTagName("body")[0];
-  // 子要素にテキストエリアを配置
-  bodyElm.appendChild(copyFrom);
+//function isJSON(arg) {
+//  arg = (typeof arg === "function") ? arg() : arg;
+//  if (typeof arg  !== "string") {
+//    return false;
+//  }
+//  try {
+//    arg = (!JSON) ? eval("(" + arg + ")") : JSON.parse(arg);
+//    return true;
+//  } catch (e) {
+//    return false;
+//  }
+//};
 
-  // テキストエリアの値を選択
-  copyFrom.select();
-  // コピーコマンド発行
-  var retVal = document.execCommand('copy');
-  // 追加テキストエリアを削除
-  bodyElm.removeChild(copyFrom);
-  // 処理結果を返却
-  return retVal;
-}
+//function copyTextToClipboard(textVal){
+//  // テキストエリアを用意する
+//  var copyFrom = document.createElement("textarea");
+//  // テキストエリアへ値をセット
+//  copyFrom.textContent = textVal;
+//
+//  // bodyタグの要素を取得
+//  var bodyElm = document.getElementsByTagName("body")[0];
+//  // 子要素にテキストエリアを配置
+//  bodyElm.appendChild(copyFrom);
+//
+//  // テキストエリアの値を選択
+//  copyFrom.select();
+//  // コピーコマンド発行
+//  var retVal = document.execCommand('copy');
+//  // 追加テキストエリアを削除
+//  bodyElm.removeChild(copyFrom);
+//  // 処理結果を返却
+//  return retVal;
+//}
+
+// function
 
 /***/ }),
 /* 1 */
@@ -397,6 +423,169 @@ exports.default = intentObj;
 //    }
 //  }
 //}
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = setIntentRequest;
+
+var _createObject = __webpack_require__(5);
+
+var _createObject2 = _interopRequireDefault(_createObject);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// IntentRequest
+// TODO インテント名を直接取得しない
+function setIntentRequest(intentObj, intentName) {
+  var slots = (0, _createObject2.default)("slots"); // sltosのkeyとvalueを入れていく
+  var attributes = (0, _createObject2.default)("attributes"); // attributesのkeyとvalueを入れていく
+  // 値を代入
+  intentObj["request"]["intent"]["name"] = intentName;
+  if (Object.keys(slots).length === 0) {
+    intentObj["request"]["intent"]["slots"] = null;
+  } else {
+    intentObj["request"]["intent"]["slots"] = slots;
+  }
+  if (Object.keys(attributes).length !== 0) {
+    //console.log(JSON.parse(attributes.ff));
+    console.log(attributes.ff);
+    intentObj["session"]["sessionAttributes"] = attributes;
+  }
+  return intentObj;
+}
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = createObject;
+
+var _isJson = __webpack_require__(6);
+
+var _isJson2 = _interopRequireDefault(_isJson);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// keyとvalueを取得
+function createObject(type) {
+  var obj = {};
+  var i = 1;
+  while (true) {
+    var perTypeNum = ".per-" + type + "-" + String(i);
+    var typeNumKey = "#" + type + "-" + String(i) + "-key";
+    var typeNumValue = "#" + type + "-" + String(i) + "-value";
+    var key = $(perTypeNum).find(typeNumKey).val(); // key取得
+    var value = $(perTypeNum).find(typeNumValue).val(); // value取得
+    if (key === undefined || value === undefined) {
+      break;
+    }
+    // それぞれ値がなかったら空で返す
+    if (type === "slots" && key !== "") {
+      obj[key] = {
+        "name": key,
+        "value": value
+      };
+    } else if (type === "attributes" && key !== "") {
+      console.log(value);
+      //obj[key] = value;
+      if ((0, _isJson2.default)(value)) {
+        obj[key] = JSON.parse(value);
+      } else {
+        obj[key] = value;
+      }
+    }
+    i++;
+  }
+  return obj;
+}
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = isJSON;
+function isJSON(arg) {
+  arg = typeof arg === "function" ? arg() : arg;
+  if (typeof arg !== "string") {
+    return false;
+  }
+  try {
+    arg = !JSON ? eval("(" + arg + ")") : JSON.parse(arg);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = makePerStr;
+// input要素作成
+function makePerStr(type, num) {
+  num = String(num);
+  var str = "<div class='per-" + type + "-" + num + "'>" + "<div class='row'>" + "<div class='form-group col-md-5'>" + "<input type='text' class='form-control' id='" + type + "-" + num + "-key" + "' placeholder='key'>" + "</div>" + "<div class='form-group col-md-5'>" + "<input type='text' class='form-control' id='" + type + "-" + num + "-value" + "' placeholder='value'>" + "</div>" + "</div>" + "</div>";
+  return str;
+}
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = copyTextToClipboard;
+function copyTextToClipboard(textVal) {
+  // テキストエリアを用意する
+  var copyFrom = document.createElement("textarea");
+  // テキストエリアへ値をセット
+  copyFrom.textContent = textVal;
+
+  // bodyタグの要素を取得
+  var bodyElm = document.getElementsByTagName("body")[0];
+  // 子要素にテキストエリアを配置
+  bodyElm.appendChild(copyFrom);
+
+  // テキストエリアの値を選択
+  copyFrom.select();
+  // コピーコマンド発行
+  var retVal = document.execCommand('copy');
+  // 追加テキストエリアを削除
+  bodyElm.removeChild(copyFrom);
+  // 処理結果を返却
+  return retVal;
+}
 
 /***/ })
 /******/ ]);
