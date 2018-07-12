@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -70,19 +70,73 @@
 "use strict";
 
 
-var _launch = __webpack_require__(1);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = createObject;
+
+var _isJson = __webpack_require__(6);
+
+var _isJson2 = _interopRequireDefault(_isJson);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// keyとvalueを取得
+function createObject(type) {
+  var obj = {};
+  var i = 1;
+  while (true) {
+    var perTypeNum = ".per-" + type + "-" + String(i);
+    var typeNumKey = "#" + type + "-" + String(i) + "-key";
+    var typeNumValue = "#" + type + "-" + String(i) + "-value";
+
+    var key = $(perTypeNum).find(typeNumKey).val(); // key取得
+    var value = $(perTypeNum).find(typeNumValue).val(); // value取得
+
+    // フォームの中がからだったら終了
+    if (key === undefined || value === undefined) {
+      break;
+    }
+
+    if (type === "slots" && key !== "") {
+      obj[key] = {
+        "name": key,
+        "value": value
+      };
+    } else if (type === "attributes" && key !== "") {
+      console.log(value);
+      //obj[key] = value;
+      if ((0, _isJson2.default)(value)) {
+        obj[key] = JSON.parse(value);
+      } else {
+        obj[key] = value;
+      }
+    }
+    i++;
+  }
+  return obj;
+}
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _launch = __webpack_require__(2);
 
 var _launch2 = _interopRequireDefault(_launch);
 
-var _sessionEnd = __webpack_require__(2);
+var _sessionEnd = __webpack_require__(3);
 
 var _sessionEnd2 = _interopRequireDefault(_sessionEnd);
 
-var _intent = __webpack_require__(3);
+var _intent = __webpack_require__(4);
 
 var _intent2 = _interopRequireDefault(_intent);
 
-var _setIntentRequest = __webpack_require__(4);
+var _setIntentRequest = __webpack_require__(5);
 
 var _setIntentRequest2 = _interopRequireDefault(_setIntentRequest);
 
@@ -94,16 +148,23 @@ var _copyTextToClipboard = __webpack_require__(8);
 
 var _copyTextToClipboard2 = _interopRequireDefault(_copyTextToClipboard);
 
+var _createObject = __webpack_require__(0);
+
+var _createObject2 = _interopRequireDefault(_createObject);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// function
 $(function () {
 
-  // slots
+  // slots入力フォーム作成
   var slotsAdd = $("#slots-add");
   var slots = $(".slots");
   var slotsNum = 1;
-  slots.append((0, _makePerStr2.default)("slots", slotsNum)); // 画面を読み込んだ時に１つ表示
+  // 画面を読み込んだ時に１つ表示
+  slots.append((0, _makePerStr2.default)("slots", slotsNum));
 
+  // ボタンを押した時にフォームを一つ追加
   slotsAdd.on('click', function () {
     slotsNum++;
     slots.append((0, _makePerStr2.default)("slots", slotsNum));
@@ -113,21 +174,33 @@ $(function () {
   var attributesAdd = $("#attributes-add");
   var attributes = $(".attributes");
   var attributesNum = 1;
+  // 画面を読み込んだ時に１つ表示
   attributes.append((0, _makePerStr2.default)("attributes", attributesNum));
 
+  // ボタンを押した時にフォームを一つ追加
   attributesAdd.on('click', function () {
     attributesNum++;
     attributes.append((0, _makePerStr2.default)("attributes", attributesNum));
   });
 
-  //create
+  // JSONを作成
   var createButton = $(".create-button");
   createButton.on("click", function () {
     var requestTypeVal = $("input[name='inlineRadioOptions']:checked").val();
 
     if (requestTypeVal === "IntentRequest") {
       var intentName = $("#intent-name").val();
-      var responseObj = (0, _setIntentRequest2.default)(_intent2.default, intentName);
+      // インテント名が空だったら、アラートを表示させる
+      if (!intentName) {
+        alert('インテント名が空です。');
+        return "";
+      }
+      // slotsとattributesの値をフォームから取得
+      // slotsとattributesのオブジェクトを作
+      var slots = (0, _createObject2.default)("slots"); // sltosのkeyとvalueを入れていく
+      var attributes = (0, _createObject2.default)("attributes"); // attributesのkeyとvalueを入れていく
+
+      var responseObj = (0, _setIntentRequest2.default)(_intent2.default, intentName, slots, attributes);
     } else if (requestTypeVal === "LaunchRequest") {
       var responseObj = _launch2.default;
     } else if (requestTypeVal === "SessionEndedRequest") {
@@ -252,10 +325,8 @@ $(function () {
 //  return retVal;
 //}
 
-// function
-
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -306,7 +377,7 @@ var launchObj = {
 exports.default = launchObj;
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -319,7 +390,7 @@ var sessionEndObj = { "version": "0.1.0", "session": { "new": false, "sessionAtt
 exports.default = sessionEndObj;
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -425,7 +496,7 @@ exports.default = intentObj;
 //}
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -436,7 +507,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = setIntentRequest;
 
-var _createObject = __webpack_require__(5);
+var _createObject = __webpack_require__(0);
 
 var _createObject2 = _interopRequireDefault(_createObject);
 
@@ -444,9 +515,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // IntentRequest
 // TODO インテント名を直接取得しない
-function setIntentRequest(intentObj, intentName) {
-  var slots = (0, _createObject2.default)("slots"); // sltosのkeyとvalueを入れていく
-  var attributes = (0, _createObject2.default)("attributes"); // attributesのkeyとvalueを入れていく
+function setIntentRequest(intentObj, intentName, slots, attributes) {
+  //var slots = createObject("slots"); // sltosのkeyとvalueを入れていく
+  //var attributes = createObject("attributes"); // attributesのkeyとvalueを入れていく
   // 値を代入
   intentObj["request"]["intent"]["name"] = intentName;
   if (Object.keys(slots).length === 0) {
@@ -460,57 +531,6 @@ function setIntentRequest(intentObj, intentName) {
     intentObj["session"]["sessionAttributes"] = attributes;
   }
   return intentObj;
-}
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = createObject;
-
-var _isJson = __webpack_require__(6);
-
-var _isJson2 = _interopRequireDefault(_isJson);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// keyとvalueを取得
-function createObject(type) {
-  var obj = {};
-  var i = 1;
-  while (true) {
-    var perTypeNum = ".per-" + type + "-" + String(i);
-    var typeNumKey = "#" + type + "-" + String(i) + "-key";
-    var typeNumValue = "#" + type + "-" + String(i) + "-value";
-    var key = $(perTypeNum).find(typeNumKey).val(); // key取得
-    var value = $(perTypeNum).find(typeNumValue).val(); // value取得
-    if (key === undefined || value === undefined) {
-      break;
-    }
-    // それぞれ値がなかったら空で返す
-    if (type === "slots" && key !== "") {
-      obj[key] = {
-        "name": key,
-        "value": value
-      };
-    } else if (type === "attributes" && key !== "") {
-      console.log(value);
-      //obj[key] = value;
-      if ((0, _isJson2.default)(value)) {
-        obj[key] = JSON.parse(value);
-      } else {
-        obj[key] = value;
-      }
-    }
-    i++;
-  }
-  return obj;
 }
 
 /***/ }),

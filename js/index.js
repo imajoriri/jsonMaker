@@ -5,15 +5,18 @@ import intentObj from "./intent.js";
 import setIntentRequest from "./functions/set-intent-request.js";
 import makePerStr from "./functions/make-per-str.js";
 import copyTextToClipboard from "./functions/copy-text-to-clipboard.js";
+import createObject from "./functions/create-object.js";
 
 $(function(){
 
-  // slots
+  // slots入力フォーム作成
   var slotsAdd = $("#slots-add")
   var slots = $(".slots")
   var slotsNum = 1;
-  slots.append(makePerStr("slots", slotsNum)); // 画面を読み込んだ時に１つ表示
+  // 画面を読み込んだ時に１つ表示
+  slots.append(makePerStr("slots", slotsNum)); 
 
+  // ボタンを押した時にフォームを一つ追加
   slotsAdd.on('click', function(){
     slotsNum++;
     slots.append(makePerStr("slots", slotsNum));
@@ -23,21 +26,35 @@ $(function(){
   var attributesAdd = $("#attributes-add")
   var attributes = $(".attributes");
   var attributesNum = 1;
+  // 画面を読み込んだ時に１つ表示
   attributes.append(makePerStr("attributes", attributesNum));
 
+  // ボタンを押した時にフォームを一つ追加
   attributesAdd.on('click', function(){
     attributesNum++;
     attributes.append(makePerStr("attributes", attributesNum));
   });
 
-  //create
+  // JSONを作成
   var createButton = $(".create-button");
   createButton.on("click", function(){
     var requestTypeVal = $("input[name='inlineRadioOptions']:checked").val();
 
     if(requestTypeVal ==="IntentRequest"){
       var intentName = $("#intent-name").val();
-      var responseObj = setIntentRequest(intentObj, intentName);
+
+      // インテント名が空だったら、アラートを表示させる
+      if(!intentName){
+        alert('インテント名が空です。');
+        return "";
+      }
+
+      // slotsとattributesの値をフォームから取得
+      // slotsとattributesのオブジェクトを作
+      var slots = createObject("slots"); // sltosのkeyとvalueを入れていく
+      var attributes = createObject("attributes"); // attributesのkeyとvalueを入れていく
+
+      var responseObj = setIntentRequest(intentObj, intentName, slots, attributes);
     }else if(requestTypeVal === "LaunchRequest"){
       var responseObj = launchObj;
     }else if(requestTypeVal === "SessionEndedRequest"){
