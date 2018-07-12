@@ -190,11 +190,13 @@ $(function () {
 
     if (requestTypeVal === "IntentRequest") {
       var intentName = $("#intent-name").val();
+
       // インテント名が空だったら、アラートを表示させる
       if (!intentName) {
         alert('インテント名が空です。');
         return "";
       }
+
       // slotsとattributesの値をフォームから取得
       // slotsとattributesのオブジェクトを作
       var slots = (0, _createObject2.default)("slots"); // sltosのkeyとvalueを入れていく
